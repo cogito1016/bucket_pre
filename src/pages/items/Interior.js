@@ -54,8 +54,27 @@ const BookmarkBox = styled.div`
   }
 `;
 
+const bookmarkBtnHandler = (interior) => {
+  const localStorage = window.localStorage;
+
+  if (localStorage.getItem(interior.id) === null) {
+    appendDataToLocalStorage(interior);
+  } else {
+    removeDataFromLocalStorage(interior);
+  }
+};
+
+const appendDataToLocalStorage = (interior) => {
+  window.localStorage.setItem(interior.id, JSON.stringify(interior));
+};
+
+const removeDataFromLocalStorage = (interior) => {
+  window.localStorage.removeItem(interior.id);
+};
+
 const Interior = (props) => {
-  const { image_url, nickname, profile_image_url } = props.data;
+  const interior = props.data;
+  const { image_url, nickname, profile_image_url } = interior;
 
   return (
     <Container>
@@ -69,7 +88,10 @@ const Interior = (props) => {
       </UserBox>
       <InteriorImg src={image_url} alt="인테리어 이미지" />
       <BookmarkBox>
-        <FontAwesomeIcon icon={faBookmark} />
+        <FontAwesomeIcon
+          onClick={() => bookmarkBtnHandler(interior)}
+          icon={faBookmark}
+        />
       </BookmarkBox>
     </Container>
   );
