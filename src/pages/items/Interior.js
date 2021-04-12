@@ -1,6 +1,8 @@
+import { Component } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark } from "@fortawesome/free-solid-svg-icons";
+import { faBookmark as faBookmarkClicked } from "@fortawesome/free-solid-svg-icons";
+import { faBookmark } from "@fortawesome/free-regular-svg-icons";
 
 const USER_DEFAULT_ICON = "/user/user_default_icon.png";
 
@@ -47,54 +49,101 @@ const BookmarkBox = styled.div`
   right: 10px;
   font-size: 30px;
   cursor: pointer;
-  color: #bdbcbd;
+`;
 
+const UncheckedBox = styled.div`
+  color: #bdbcbd;
   &:hover {
     color: #4fc5f0;
   }
 `;
 
-const bookmarkBtnHandler = (interior) => {
-  const localStorage = window.localStorage;
+const CheckedBox = styled.div`
+  color: #4fc5f0;
+`;
 
-  if (localStorage.getItem(interior.id) === null) {
-    appendDataToLocalStorage(interior);
-  } else {
-    removeDataFromLocalStorage(interior);
+class Interior extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { interior: props.data, isBookmark: false };
   }
-};
 
-const appendDataToLocalStorage = (interior) => {
-  window.localStorage.setItem(interior.id, JSON.stringify(interior));
-};
+  componentDidMount() {
+    this.getAndSetIsBookmark();
+  }
 
-const removeDataFromLocalStorage = (interior) => {
-  window.localStorage.removeItem(interior.id);
-};
+  getAndSetIsBookmark = () => {
+    const { interior } = this.state;
+    const isBookmark = this.isExistInLocalStorage(interior);
+    this.setState({
+      isBookmark: isBookmark,
+    });
+  };
 
-const Interior = (props) => {
-  const interior = props.data;
-  const { image_url, nickname, profile_image_url } = interior;
+  bookmarkBtnHandler = (interior) => {
+    if (this.isExistInLocalStorage(interior)) {
+      this.removeDataFromLocalStorage(interior);
+    } else {
+      this.appendDataToLocalStorage(interior);
+    }
+    this.toggleIsBook();
+    console.log(window.localStorage);
+  };
 
-  return (
-    <Container>
-      <UserBox>
-        <UserIcon
-          src={
-            profile_image_url === null ? USER_DEFAULT_ICON : profile_image_url
-          }
-        />
-        <UserName>{nickname}</UserName>
-      </UserBox>
-      <InteriorImg src={image_url} alt="인테리어 이미지" />
-      <BookmarkBox>
-        <FontAwesomeIcon
-          onClick={() => bookmarkBtnHandler(interior)}
-          icon={faBookmark}
-        />
-      </BookmarkBox>
-    </Container>
-  );
-};
+  toggleIsBook = () => {
+    const isBookMarkToggled = !this.state.isBookmark;
+    this.setState({
+      isBookmark: isBookMarkToggled,
+    });
+  };
+
+  appendDataToLocalStorage = (interior) => {
+    window.localStorage.setItem(interior.id, JSON.stringify(interior));
+  };
+
+  removeDataFromLocalStorage = (interior) => {
+    window.localStorage.removeItem(interior.id);
+  };
+
+  isExistInLocalStorage = (interior) => {
+    return window.localStorage.getItem(interior.id) !== null ? true : false;
+  };
+
+  render() {
+    const { interior, isBookmark } = this.state;
+    const { image_url, nickname, profile_image_url } = interior;
+
+    return (
+      <Container>
+        <UserBox>
+          <UserIcon
+            src={
+              profile_image_url === null ? USER_DEFAULT_ICON : profile_image_url
+            }
+          />
+          <UserName>{nickname}</UserName>
+        </UserBox>
+        <InteriorImg src={image_url} alt="인테리어 이미지" />
+        <BookmarkBox>
+          {isBookmark ? (
+            <CheckedBox>
+              <FontAwesomeIcon
+                onClick={() => this.bookmarkBtnHandler(interior)}
+                icon={faBookmarkClicked}
+              />
+            </CheckedBox>
+          ) : (
+            <UncheckedBox>
+              <FontAwesomeIcon
+                onClick={() => this.bookmarkBtnHandler(interior)}
+                icon={faBookmark}
+              />
+            </UncheckedBox>
+          )}
+        </BookmarkBox>
+      </Container>
+    );
+  }
+}
 
 export default Interior;
