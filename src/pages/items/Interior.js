@@ -24,6 +24,7 @@ const InteriorImg = styled.img`
   height: 260px;
   margin-top: 10px;
   border-radius: 6px;
+  user-select: none;
 `;
 
 const UserIcon = styled.img`
@@ -33,6 +34,7 @@ const UserIcon = styled.img`
   width: 30px;
   height: 30px;
   border-radius: 30px;
+  user-select: none;
 `;
 
 const UserName = styled.label`
@@ -41,6 +43,7 @@ const UserName = styled.label`
   height: 40px;
   margin-left: 50px;
   line-height: 40px;
+  user-select: none;
 `;
 
 const BookmarkBox = styled.div`
@@ -87,7 +90,6 @@ class Interior extends Component {
       this.appendDataToLocalStorage(interior);
     }
     this.toggleIsBook();
-    console.log(window.localStorage);
   };
 
   toggleIsBook = () => {

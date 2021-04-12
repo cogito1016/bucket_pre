@@ -12,11 +12,15 @@ const CheckBox = styled.input`
   margin-right: 5px;
 `;
 
+const ScrapBtnDescriptionLabel = styled.label`
+  user-select: none;
+`;
+
 const ScrapBtn = () => {
   return (
     <Container>
       <CheckBox type="checkbox" />
-      <label>스크랩한 것만 보기</label>
+      <ScrapBtnDescriptionLabel>스크랩한 것만 보기</ScrapBtnDescriptionLabel>
     </Container>
   );
 };
