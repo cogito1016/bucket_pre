@@ -24,13 +24,18 @@ class Interiors extends Component {
   constructor() {
     super();
     this.state = {
-      page: 1,
+      page: 0,
       interiors: [],
     };
   }
 
   componentDidMount() {
-    this.getAndSetInteriorsByPage();
+    this.addInfiniteScrollEvent();
+    this.firstRunInfiniteEventWhenWillMount();
+  }
+
+  componentWillUnmount() {
+    this.removeInfiniteScrollEvent();
   }
 
   getAndSetInteriorsByPage = async () => {
@@ -39,17 +44,58 @@ class Interiors extends Component {
     await axios
       .get(`${endPoint}/page_${page}.json`)
       .then((response) => {
-        const interiors = response.data;
+        const { data } = response;
 
-        console.log(interiors);
+        if (data.length === 0) {
+          this.removeInfiniteScrollEvent();
+          return;
+        }
+
+        const newInteriors = this.state.interiors.concat(data);
 
         this.setState({
-          interiors: interiors,
+          interiors: newInteriors,
         });
       })
       .catch((error) => {
         console.log(error);
+        this.removeInfiniteScrollEvent();
       });
+  };
+
+  firstRunInfiniteEventWhenWillMount = () => {
+    this.infiniteScrollEvent();
+  };
+
+  addInfiniteScrollEvent = () => {
+    window.addEventListener("scroll", this.infiniteScrollEvent);
+  };
+
+  removeInfiniteScrollEvent = () => {
+    window.removeEventListener("scroll", this.infiniteScrollEvent);
+  };
+
+  infiniteScrollEvent = () => {
+    const page = this.state.page;
+
+    const { documentElement, body } = document;
+
+    const scrollHeight = Math.max(
+      documentElement.scrollHeight,
+      body.scrollHeight
+    );
+    const scrollTop = Math.max(documentElement.scrollTop, body.scrollTop);
+    const clientHeight = documentElement.clientHeight;
+
+    if (scrollTop + clientHeight >= scrollHeight) {
+      const newPage = page + 1;
+      this.setState(
+        {
+          page: newPage,
+        },
+        this.getAndSetInteriorsByPage
+      );
+    }
   };
 
   render() {
