@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { ScrapBtn } from "./items";
 
 const Container = styled.div`
   position: relative;
@@ -8,7 +9,12 @@ const Container = styled.div`
 `;
 
 const Interiors = () => {
-  return <Container>Im Interiors</Container>;
+  return (
+    <Container>
+      <ScrapBtn />
+      <div>이미지창고</div>
+    </Container>
+  );
 };
 
 export default Interiors;
