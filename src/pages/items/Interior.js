@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 
 const USER_DEFAULT_ICON = "/user/user_default_icon.png";
 
@@ -44,6 +46,19 @@ const UserName = styled.label`
   background-color: yellow;
 `;
 
+const BookmarkBox = styled.div`
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 30px;
+  cursor: pointer;
+  color: #bdbcbd;
+
+  &:hover {
+    color: #4fc5f0;
+  }
+`;
+
 const Interior = () => {
   return (
     <Container>
@@ -52,6 +67,9 @@ const Interior = () => {
         <UserName>Wade Warren</UserName>
       </UserBox>
       <InteriorImg src={USER_DEFAULT_ICON} />
+      <BookmarkBox>
+        <FontAwesomeIcon icon={faBookmark} />
+      </BookmarkBox>
     </Container>
   );
 };
