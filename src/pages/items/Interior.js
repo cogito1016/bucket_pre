@@ -8,22 +8,19 @@ const Container = styled.div`
   position: relative;
   width: 260px;
   height: 310px;
-  margin-top: 10px;
-  background-color: green;
+  margin-top: 20px;
 `;
 
 const UserBox = styled.div`
   position: relative;
   width: 260px;
   height: 40px;
-  background-color: pink;
 `;
 
 const InteriorImg = styled.img`
   width: 260px;
   height: 260px;
   margin-top: 10px;
-  background-color: yellow;
   border-radius: 6px;
 `;
 
@@ -34,7 +31,6 @@ const UserIcon = styled.img`
   width: 30px;
   height: 30px;
   border-radius: 30px;
-  background-color: gray;
 `;
 
 const UserName = styled.label`
@@ -43,7 +39,6 @@ const UserName = styled.label`
   height: 40px;
   margin-left: 50px;
   line-height: 40px;
-  background-color: yellow;
 `;
 
 const BookmarkBox = styled.div`
@@ -59,14 +54,20 @@ const BookmarkBox = styled.div`
   }
 `;
 
-const Interior = () => {
+const Interior = (props) => {
+  const { image_url, nickname, profile_image_url } = props.data;
+
   return (
     <Container>
       <UserBox>
-        <UserIcon src={USER_DEFAULT_ICON} />
-        <UserName>Wade Warren</UserName>
+        <UserIcon
+          src={
+            profile_image_url === null ? USER_DEFAULT_ICON : profile_image_url
+          }
+        />
+        <UserName>{nickname}</UserName>
       </UserBox>
-      <InteriorImg src={USER_DEFAULT_ICON} />
+      <InteriorImg src={image_url} alt="인테리어 이미지" />
       <BookmarkBox>
         <FontAwesomeIcon icon={faBookmark} />
       </BookmarkBox>
