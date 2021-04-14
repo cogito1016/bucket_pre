@@ -10,7 +10,7 @@ const Container = styled.div`
   position: relative;
   width: 260px;
   height: 310px;
-  margin-top: 20px;
+  margin: 20px 20px 0 20px;
 `;
 
 const UserBox = styled.div`
