@@ -26,7 +26,6 @@ class Interiors extends Component {
       page: 0,
       interiorsForRendering: [],
       interiorsByPage: [],
-      interiorsByBookmark: [],
       isCheckedBookmark: false,
     };
   }
@@ -116,25 +115,26 @@ class Interiors extends Component {
     const { isCheckedBookmark } = this.state;
 
     if (!isCheckedBookmark) {
-      const { interiorsByPage } = this.state;
-
-      this.setState({
-        interiorsForRendering: interiorsByPage,
-      });
-
-      return; //체크 해제 시 나오는 데이터는 어떻게처리 할 것인가?
+      this.setInteriorsUserWasLookingAt();
+    } else {
+      this.setInteriorsBookmarked();
     }
+  };
 
+  setInteriorsBookmarked = () => {
     const interiorsFromLocalStorage = this.getInteriorsFromLocalStorage();
 
-    this.setState(
-      {
-        interiorsForRendering: interiorsFromLocalStorage,
-      },
-      () => {
-        console.log(this.state.interiorsForRendering);
-      }
-    );
+    this.setState({
+      interiorsForRendering: interiorsFromLocalStorage,
+    });
+  };
+
+  setInteriorsUserWasLookingAt = () => {
+    const { interiorsByPage } = this.state;
+
+    this.setState({
+      interiorsForRendering: interiorsByPage,
+    });
   };
 
   getInteriorsFromLocalStorage = () => {

@@ -89,6 +89,7 @@ class Interior extends Component {
     } else {
       this.appendDataToLocalStorage(interior);
     }
+
     this.toggleIsBook();
   };
 
