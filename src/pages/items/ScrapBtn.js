@@ -16,10 +16,17 @@ const ScrapBtnDescriptionLabel = styled.label`
   user-select: none;
 `;
 
-const ScrapBtn = () => {
+const ScrapBtn = (props) => {
+  const { changeBookmarkBtnHandler } = props;
+
   return (
     <Container>
-      <CheckBox type="checkbox" />
+      <CheckBox
+        type="checkbox"
+        onChange={(e) => {
+          changeBookmarkBtnHandler(e);
+        }}
+      />
       <ScrapBtnDescriptionLabel>스크랩한 것만 보기</ScrapBtnDescriptionLabel>
     </Container>
   );

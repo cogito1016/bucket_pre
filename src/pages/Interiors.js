@@ -25,7 +25,10 @@ class Interiors extends Component {
     super();
     this.state = {
       page: 0,
-      interiors: [],
+      interiorsForRendering: [],
+      interiorsByPage: [],
+      interiorsByBookmark: [],
+      isCheckedBookmark: false,
     };
   }
 
@@ -51,10 +54,11 @@ class Interiors extends Component {
           return;
         }
 
-        const newInteriors = this.state.interiors.concat(data);
+        const newInteriors = this.state.interiorsByPage.concat(data);
 
         this.setState({
-          interiors: newInteriors,
+          interiorsByPage: newInteriors,
+          interiorsForRendering: newInteriors,
         });
       })
       .catch((error) => {
@@ -98,13 +102,65 @@ class Interiors extends Component {
     }
   };
 
+  changeBookmarkBtnHandler = ({ target }) => {
+    const checked = target.checked;
+
+    this.setState(
+      {
+        isCheckedBookmark: checked,
+      },
+      this.setInteriorsByBookmark
+    );
+  };
+
+  setInteriorsByBookmark = async () => {
+    const { isCheckedBookmark } = this.state;
+
+    if (!isCheckedBookmark) {
+      const { interiorsByPage } = this.state;
+
+      this.setState({
+        interiorsForRendering: interiorsByPage,
+      });
+
+      return; //체크 해제 시 나오는 데이터는 어떻게처리 할 것인가?
+    }
+
+    const interiorsFromLocalStorage = this.getInteriorsFromLocalStorage();
+
+    this.setState(
+      {
+        interiorsForRendering: interiorsFromLocalStorage,
+      },
+      () => {
+        console.log(this.state.interiorsForRendering);
+      }
+    );
+  };
+
+  getInteriorsFromLocalStorage = () => {
+    const interiors = [];
+    const localStorage = window.localStorage;
+    const lengthOfInterirors = localStorage.length;
+
+    for (let i = 0; i < lengthOfInterirors; i++) {
+      const key = localStorage.key(i);
+      const value = localStorage.getItem(key);
+
+      interiors.push(JSON.parse(value));
+    }
+
+    return interiors;
+  };
+
   render() {
-    const { interiors } = this.state;
+    const { interiorsForRendering } = this.state;
+
     return (
       <Container>
-        <ScrapBtn />
+        <ScrapBtn changeBookmarkBtnHandler={this.changeBookmarkBtnHandler} />
         <InteriorsBox>
-          {interiors.map((interior) => {
+          {interiorsForRendering.map((interior) => {
             return <Interior key={interior.id} data={interior} />;
           })}
         </InteriorsBox>
